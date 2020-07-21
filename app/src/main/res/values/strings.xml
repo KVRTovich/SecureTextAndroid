@@ -23,4 +23,5 @@
     </string-array>
     <string name="title_activity_settings">Settings</string>
     <string name="Theme_Night">Night</string>
+    <string name="Ab">SecureText - CipherText \n @Glazov Utility</string>
 </resources>

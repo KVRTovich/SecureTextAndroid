@@ -16,22 +16,15 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/inp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="72dp"
-        android:ems="10"
-        android:hint="@string/Input_Text"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/outp"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
         android:id="@+id/outp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:ems="10"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:hint="@string/Output"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/button2"
@@ -70,5 +63,15 @@
         android:entries="@array/alg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/inp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:ems="10"
+        android:hint="@string/Input_Text"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/pass" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

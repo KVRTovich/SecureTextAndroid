@@ -1,6 +1,9 @@
 package net.kyrtovich.myapplicationx;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -16,22 +19,25 @@ import android.widget.Spinner;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.Cipher;
 
-import java.math.BigInteger;
 import java.security.MessageDigest;
 
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+
 
 public class FirstFragment extends Fragment {
     public Editable text;
     public String ob_string;
     public byte [] ch_array;
     public Editable password;
+    public ClipboardManager cpm;
+    public ClipData Cd1;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -120,6 +126,8 @@ public class FirstFragment extends Fragment {
             }
         });
 
+
+
         view.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
 
@@ -146,7 +154,23 @@ public class FirstFragment extends Fragment {
 
         });
 
-        view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.outp).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (outp.getText().toString().trim().length() > 0) {
+                    cpm = (ClipboardManager)getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                    Cd1 = ClipData.newPlainText("text", outp.getText().toString());
+                    cpm.setPrimaryClip(Cd1);
+                    Snackbar.make(view, "Output text has been copied", Snackbar.LENGTH_LONG).show();
+                }
+                else {
+                    Snackbar.make(view, "Output Text empty", Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener()  {
 
             @Override
 
