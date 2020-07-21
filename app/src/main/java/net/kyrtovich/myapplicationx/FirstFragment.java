@@ -15,6 +15,7 @@ import android.widget.EditText;
 
 import android.util.Base64;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.Cipher;
@@ -162,10 +163,10 @@ public class FirstFragment extends Fragment {
                     cpm = (ClipboardManager)getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                     Cd1 = ClipData.newPlainText("text", outp.getText().toString());
                     cpm.setPrimaryClip(Cd1);
-                    Snackbar.make(view, "Output text has been copied", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"Output text has been copied", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    Snackbar.make(view, "Output Text empty", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"Output is empty", Toast.LENGTH_LONG).show();
                 }
             }
         });
