@@ -17,6 +17,7 @@
     <string name="title_activity_main2">About</string>
     <string-array name="alg">
         <item>AES+SHA256</item>
+        <item>AES + MD5</item>
         <item>SHA-256</item>
         <item>BASE64</item>
         <item>MD5</item>

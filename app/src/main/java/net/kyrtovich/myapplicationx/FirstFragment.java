@@ -47,23 +47,32 @@ public class FirstFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_first, container, false);
     }
-    public void md5() throws Exception {
+    public void md5(boolean tru) throws Exception {
         MessageDigest initp = MessageDigest.getInstance("MD5");
-        ch_array  = initp.digest(text.toString().getBytes("UTF-8"));
-        StringBuilder sb = new StringBuilder();
-        for (byte b :ch_array) {
-            sb.append(String.format("%02x",b));
+        if (tru == true) {
+            ch_array  = initp.digest(text.toString().getBytes("UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            for (byte b :ch_array) {
+                sb.append(String.format("%02x",b));
+            }
+            ob_string = sb.toString();
         }
-        ob_string = sb.toString();
+        else {
+            ch_array  = initp.digest(password.toString().getBytes("UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            for (byte b :ch_array) {
+                sb.append(String.format("%02x",b));
+            }
+            ob_string = sb.toString();
+        }
     }
     public void hashingpassword(Boolean tru) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        if (tru == true) {
-            MessageDigest initp = MessageDigest.getInstance("SHA-256");
+        MessageDigest initp = MessageDigest.getInstance("SHA-256");
+        if (tru == true) { ;
             ch_array  = initp.digest(password.toString().getBytes("UTF-8"));
             ob_string = Base64.encodeToString(ch_array, Base64.DEFAULT);
         }
         else {
-            MessageDigest initp = MessageDigest.getInstance("SHA-256");
             ch_array  = initp.digest(text.toString().getBytes("UTF-8"));
             ob_string = Base64.encodeToString(ch_array, Base64.DEFAULT);
         }
@@ -102,14 +111,18 @@ public class FirstFragment extends Fragment {
                         pass.setEnabled(true);
                         break;
                     case 1:
+                        butt.setEnabled(true);
+                        pass.setEnabled(true);
+                        break;
+                    case 2:
                         butt.setEnabled(false);
                         pass.setEnabled(false);
                         break;
-                    case 2:
+                    case 3:
                         pass.setEnabled(false);
                         butt.setEnabled(true);
                         break;
-                    case 3:
+                    case 4:
                         butt.setEnabled(false);
                         pass.setEnabled(false);
                         break;
@@ -138,6 +151,14 @@ public class FirstFragment extends Fragment {
                 if (spin.getSelectedItemPosition() == 0) {
                     try {
                         hashingpassword(true);
+                        aes(false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                else if (spin.getSelectedItemPosition() == 1) {
+                    try {
+                        md5(false);
                         aes(false);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -190,7 +211,8 @@ public class FirstFragment extends Fragment {
                         break;
                     case 1:
                         try {
-                            hashingpassword(false);
+                            md5(true);
+                            aes(true);
                             outp.setText(Base64.encodeToString(ch_array, Base64.DEFAULT));
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -198,14 +220,22 @@ public class FirstFragment extends Fragment {
                         break;
                     case 2:
                         try {
-                            outp.setText(Base64.encodeToString(text.toString().getBytes("UTF-8"), Base64.DEFAULT));
+                            hashingpassword(false);
+                            outp.setText(Base64.encodeToString(ch_array, Base64.DEFAULT));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         break;
                     case 3:
                         try {
-                            md5();
+                            outp.setText(Base64.encodeToString(text.toString().getBytes("UTF-8"), Base64.DEFAULT));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 4:
+                        try {
+                            md5(false);
                             outp.setText(ob_string);
                         } catch (Exception e) {
                             e.printStackTrace();
