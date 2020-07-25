@@ -3,4 +3,7 @@
     <color name="colorPrimary">#1f1f1f</color>
     <color name="colorPrimaryDark">#1f1f1f</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimaryDayFirst">#888888</color>
+    <color name="colorPrimaryDay">#888888</color>
+    <color name="colorAccentDay">#03DAC5</color>
 </resources>

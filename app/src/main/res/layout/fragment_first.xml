@@ -71,7 +71,7 @@
         android:layout_marginBottom="12dp"
         android:ems="10"
         android:hint="@string/Input_Text"
-        android:inputType="textPersonName"
+        android:inputType="textShortMessage|textLongMessage"
         app:layout_constraintBottom_toTopOf="@+id/pass" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
