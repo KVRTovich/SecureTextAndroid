@@ -168,7 +168,10 @@ public class FirstFragment extends Fragment {
                     try {
                         ob_string = new String(Base64.decode(text.toString().getBytes("UTF-8"), Base64.DEFAULT));
                     } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                        Toast.makeText(getActivity(),"Error", Toast.LENGTH_LONG).show();
+                    }
+                    catch(IllegalArgumentException i) {
+                        Toast.makeText(getActivity(),"Error", Toast.LENGTH_LONG).show();
                     }
                 }
                 outp.setText(ob_string);
