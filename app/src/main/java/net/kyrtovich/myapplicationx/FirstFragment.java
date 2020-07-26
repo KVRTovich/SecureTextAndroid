@@ -26,10 +26,7 @@ import java.security.MessageDigest;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 
 
 public class FirstFragment extends Fragment {
@@ -39,6 +36,7 @@ public class FirstFragment extends Fragment {
     public Editable password;
     public ClipboardManager cpm;
     public ClipData Cd1;
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -47,51 +45,47 @@ public class FirstFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_first, container, false);
     }
-    public void md5(boolean tru) throws Exception {
+    public StringBuilder md5text() throws Exception {
         MessageDigest initp = MessageDigest.getInstance("MD5");
-        if (tru == true) {
-            ch_array  = initp.digest(text.toString().getBytes("UTF-8"));
-            StringBuilder sb = new StringBuilder();
-            for (byte b :ch_array) {
-                sb.append(String.format("%02x",b));
-            }
-            ob_string = sb.toString();
+        ch_array  = initp.digest(text.toString().getBytes("UTF-8"));
+        StringBuilder sb = new StringBuilder();
+        for (byte b :ch_array) {
+            sb.append(String.format("%02x",b));
         }
-        else {
-            ch_array  = initp.digest(password.toString().getBytes("UTF-8"));
-            StringBuilder sb = new StringBuilder();
-            for (byte b :ch_array) {
-                sb.append(String.format("%02x",b));
-            }
-            ob_string = sb.toString();
-        }
+        return  sb;
     }
-    public void hashingpassword(Boolean tru) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    public StringBuilder md5pass() throws Exception {
+        MessageDigest initp = MessageDigest.getInstance("MD5");
+        ch_array  = initp.digest(password.toString().getBytes("UTF-8"));
+        StringBuilder sb = new StringBuilder();
+        for (byte b :ch_array) {
+            sb.append(String.format("%02x",b));
+        }
+        return  sb;
+    }
+    public String sha256text() throws Exception {
         MessageDigest initp = MessageDigest.getInstance("SHA-256");
-        if (tru == true) { ;
-            ch_array  = initp.digest(password.toString().getBytes("UTF-8"));
-            ob_string = Base64.encodeToString(ch_array, Base64.DEFAULT);
-        }
-        else {
-            ch_array  = initp.digest(text.toString().getBytes("UTF-8"));
-            ob_string = Base64.encodeToString(ch_array, Base64.DEFAULT);
-        }
-
+        ch_array  = initp.digest(text.toString().getBytes("UTF-8"));
+        return Base64.encodeToString(ch_array, Base64.DEFAULT);
     }
-    public void aes(Boolean tru) throws Exception {
+    public String sha256pass() throws Exception {
+        MessageDigest initp = MessageDigest.getInstance("SHA-256");
+        ch_array  = initp.digest(password.toString().getBytes("UTF-8"));
+        return Base64.encodeToString(ch_array, Base64.DEFAULT);
+    }
+    public byte[] aes(String password) throws Exception {
         Cipher xuy1 = Cipher.getInstance("AES");
-        SecretKeySpec xuy123 = new SecretKeySpec(ob_string.substring(0,16).getBytes("UTF-8"), "AES");
-        if (tru == true) {
-            xuy1.init(Cipher.ENCRYPT_MODE, xuy123);
-            ch_array = xuy1.doFinal(text.toString().getBytes("UTF-8"));
-        }
-        else {
-            xuy1.init(Cipher.DECRYPT_MODE, xuy123);
-            ch_array = xuy1.doFinal(Base64.decode(text.toString(), Base64.DEFAULT));
-            ob_string = new String(ch_array, "UTF-8");
-
-        }
+        SecretKeySpec xuy123 = new SecretKeySpec(password.substring(0,16).getBytes("UTF-8"), "AES");
+        xuy1.init(Cipher.ENCRYPT_MODE, xuy123);
+        return xuy1.doFinal(text.toString().getBytes("UTF-8"));
     }
+    public byte[] UnAesCipher(String password) throws Exception {
+        Cipher xuy1 = Cipher.getInstance("AES");
+        SecretKeySpec xuy123 = new SecretKeySpec(password.substring(0,16).getBytes("UTF-8"), "AES");
+        xuy1.init(Cipher.DECRYPT_MODE, xuy123);
+        return xuy1.doFinal(Base64.decode(text.toString(), Base64.DEFAULT));
+    }
+
 
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState)  {
         super.onViewCreated(view, savedInstanceState);
@@ -148,34 +142,35 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) { // too bad
                 text = inp.getText();
                 password = pass.getText();
-                if (spin.getSelectedItemPosition() == 0) {
-                    try {
-                        hashingpassword(true);
-                        aes(false);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                switch (spin.getSelectedItemPosition()) {
+                    case 0:
+                        try {
+                            //aes + sha256
+                            outp.setText(new String(UnAesCipher(sha256pass())));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 1: {
+                        try {
+                            // aes + md5
+                            outp.setText(new String(UnAesCipher(md5pass().toString())));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                        case 3: {
+                            try {
+                                outp.setText(new String(Base64.decode(text.toString().getBytes("UTF-8"), Base64.DEFAULT)));
+                            } catch (UnsupportedEncodingException e) {
+                                Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
+                            } catch (IllegalArgumentException i) {
+                                Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
+                            }
+                        }
                     }
                 }
-                else if (spin.getSelectedItemPosition() == 1) {
-                    try {
-                        md5(false);
-                        aes(false);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                else {
-                    try {
-                        ob_string = new String(Base64.decode(text.toString().getBytes("UTF-8"), Base64.DEFAULT));
-                    } catch (UnsupportedEncodingException e) {
-                        Toast.makeText(getActivity(),"Error", Toast.LENGTH_LONG).show();
-                    }
-                    catch(IllegalArgumentException i) {
-                        Toast.makeText(getActivity(),"Error", Toast.LENGTH_LONG).show();
-                    }
-                }
-                outp.setText(ob_string);
-            }
 
         });
 
@@ -205,26 +200,23 @@ public class FirstFragment extends Fragment {
                 switch (spin.getSelectedItemPosition()) {
                     case 0:
                         try {
-                            hashingpassword(true);
-                            aes(true);
-                            outp.setText(Base64.encodeToString(ch_array, Base64.DEFAULT));
+                            // aes + sha256
+                            outp.setText(Base64.encodeToString(aes(sha256pass()), Base64.DEFAULT));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         break;
-                    case 1:
+                    case 1: // aes + md5
                         try {
-                            md5(true);
-                            aes(true);
-                            outp.setText(Base64.encodeToString(ch_array, Base64.DEFAULT));
+                            outp.setText(Base64.encodeToString(aes(md5pass().toString()), Base64.DEFAULT));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         break;
                     case 2:
                         try {
-                            hashingpassword(false);
-                            outp.setText(Base64.encodeToString(ch_array, Base64.DEFAULT));
+                            // sha256
+                            outp.setText(sha256text());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -238,8 +230,8 @@ public class FirstFragment extends Fragment {
                         break;
                     case 4:
                         try {
-                            md5(false);
-                            outp.setText(ob_string);
+                            // md5
+                            outp.setText(md5text());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

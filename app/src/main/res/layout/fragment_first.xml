@@ -8,10 +8,12 @@
 
     <Button
         android:id="@+id/button2"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="488dp"
         android:text="@string/encode"
+        android:textColor="#888888"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -32,13 +34,15 @@
 
     <Button
         android:id="@+id/button"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
 
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="488dp"
         android:text="@string/decode"
+        android:textColor="#888888"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button2" />
 
